@@ -15,6 +15,8 @@ namespace SchoolAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 60, nullable: false),
                     OrgType = table.Column<string>(maxLength: 20, nullable: false),
+                    City = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateUpdated = table.Column<DateTime>(nullable: false)
                 },
@@ -172,18 +174,18 @@ namespace SchoolAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Organizations",
-                columns: new[] { "OrganizationID", "DateCreated", "DateUpdated", "Name", "OrgType" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "NJIT", "Public" });
+                columns: new[] { "OrganizationID", "City", "Country", "DateCreated", "DateUpdated", "Name", "OrgType" },
+                values: new object[] { 1, null, null, new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(1959), new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(2329), "NJIT", "Public" });
 
             migrationBuilder.InsertData(
                 table: "Sections",
                 columns: new[] { "SectionID", "Capacity", "CourseId", "DateCreated", "DateUpdated" },
-                values: new object[] { 1, 30, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                values: new object[] { 1, 30, null, new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5258), new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5613) });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "DateCreated", "DateUpdated", "Email", "FirstName", "LastName", "OrganizationId", "PhoneNumber", "SectionId", "UserName" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "rf57@njit.edu", "Richard", "Febres", 1, "201-923-3911", null, "rfebres" });
+                values: new object[] { 1, new DateTime(2021, 5, 2, 12, 18, 54, 681, DateTimeKind.Local).AddTicks(9537), new DateTime(2021, 5, 2, 12, 18, 54, 682, DateTimeKind.Local).AddTicks(66), "rf57@njit.edu", "Richard", "Febres", 1, "201-923-3911", null, "rfebres" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SectionId",

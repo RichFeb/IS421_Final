@@ -107,6 +107,12 @@ namespace SchoolAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnName("DateCreated")
                         .HasColumnType("datetime2");
@@ -135,8 +141,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             OrgId = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(1959),
+                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(2329),
                             OrgName = "NJIT",
                             OrgType = "Public"
                         });
@@ -208,8 +214,8 @@ namespace SchoolAPI.Migrations
                         {
                             SectionId = 1,
                             Capacity = 30,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5258),
+                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5613)
                         });
                 });
 
@@ -316,8 +322,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateUpdated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 681, DateTimeKind.Local).AddTicks(9537),
+                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 682, DateTimeKind.Local).AddTicks(66),
                             Email = "rf57@njit.edu",
                             FirstName = "Richard",
                             LastName = "Febres",
