@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,48 +23,96 @@ namespace SchoolAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "getAllOrganizations")]
         public IActionResult GetOrganizations()
         {
-            try
-            {
-                 var organizations = _repository.Organization.GetAllOrganizations(trackChanges: false);
-                // return Ok(organizations);
-                
-                var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizations);
+            var organizations = _repository.Organization.GetAllOrganizations(trackChanges: false);
 
-                return Ok(organizationDto);
-
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetOrganizations)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var organizationDto = _mapper.Map<IEnumerable<OrganizationDto>>(organizations);
+            //uncomment the code below to test the global exception handling
+            //throw new Exception("Exception");
+            return Ok(organizationDto);
         }
-        [HttpGet("{id}")]
+
+        [HttpGet("{id}", Name = "getOrganizationById")]
         public IActionResult GetOrganization(int id)
         {
-            try
+            var organization = _repository.Organization.GetOrganization(id, trackChanges: false); if (organization == null)
             {
-                var organization = _repository.Organization.GetOrganization(id, trackChanges: false); if (organization == null)
-                {
-                    _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
-                    return NotFound();
-                }
-                else
-                {
-                    var organizationDto = _mapper.Map<OrganizationDto>(organization);
-                    return Ok(organizationDto);
-                }
-
+                _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
+                return NotFound();
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError($"Something went wrong in the {nameof(GetOrganizations)} action {ex}");
-                return StatusCode(500, "Internal server error");
+                var organizationDto = _mapper.Map<OrganizationDto>(organization);
+                return Ok(organizationDto);
+            }
+        }
+
+        [HttpPost(Name = "createOrganization")]
+        public IActionResult CreateOrganization([FromBody] OrganizationForCreationDto organization)
+        {
+            if (organization == null)
+            {
+                _logger.LogError("Organization ForCreationDto object sent from client is null.");
+                return BadRequest("Organization ForCreationDto object is null");
+            }
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the OrganizationForCreationDto object");
+                return UnprocessableEntity(ModelState);
             }
 
+            var organizationEntity = _mapper.Map<Organization>(organization);
+
+            _repository.Organization.CreateOrganization(organizationEntity);
+            _repository.Save();
+
+            var organizationToReturn = _mapper.Map<OrganizationDto>(organizationEntity);
+
+            return CreatedAtRoute("getOrganizationById", new { id = organizationToReturn.OrgId }, organizationToReturn);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateOrganization(int id, [FromBody] OrganizationForUpdateDto organization)
+        {
+            if (organization == null)
+            {
+                _logger.LogError("OrganizationForUpdateDto object sent from client is null.");
+                return BadRequest("OrganizationForUpdateDto object is null");
+            }
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the OrganizationForUpdateDto object");
+                return UnprocessableEntity(ModelState);
+            }
+            var organizationEntity = _repository.Organization.GetOrganization(id, trackChanges: true);
+            if (organizationEntity == null)
+            {
+                _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            _mapper.Map(organization, organizationEntity);
+            _repository.Save();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteOrganization(int id)
+        {
+            var organization = _repository.Organization.GetOrganization(id, trackChanges: false);
+            if (organization == null)
+            {
+                _logger.LogInfo($"Organiation with id: {id} doesn't exist in the database.");
+                return NotFound();
+            }
+
+            _repository.Organization.DeleteOrganization(organization);
+            _repository.Save();
+
+            return NoContent();
         }
     }
 }
