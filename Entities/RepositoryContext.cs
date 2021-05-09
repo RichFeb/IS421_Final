@@ -16,7 +16,10 @@ namespace Entities
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
             modelBuilder.ApplyConfiguration(new SectionConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
+            modelBuilder.ApplyConfiguration(new SubmissionConfiguration());
+            modelBuilder.ApplyConfiguration(new CourseConfiguration());
+            modelBuilder.ApplyConfiguration(new SchoolConfiguration());
         }
 
         public DbSet<Organization> Organizations { get; set; }

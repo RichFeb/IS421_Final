@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using ActionFilters;
+using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace SchoolAPI.Controllers
@@ -23,46 +26,32 @@ namespace SchoolAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet(Name = "getAllCourses")]
-        public IActionResult GetCourses()
+        [HttpGet(Name = "GetAllCourses")]
+        public IActionResult GetCourses([FromQuery] CourseParameters courseParameters)
         {
-            var courses = _repository.Course.GetAllCourses(trackChanges: false);
+            var coursesFromDb = _repository.Course.GetAllCourses(courseParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(coursesFromDb.MetaData));
 
-            var courseDto = _mapper.Map<IEnumerable<CourseDto>>(courses);
-            //uncomment the code below to test the global exception handling
-            //throw new Exception("Exception");
+            var courseDto = _mapper.Map<IEnumerable<CourseDto>>(coursesFromDb);
+            
             return Ok(courseDto);
         }
 
-        [HttpGet("{id}", Name = "getCourseById")]
+        [HttpGet("{id}", Name = "GetCourseById")]
+        [ServiceFilter(typeof(ValidateCourseExistsAttribute))]
         public IActionResult GetCourse(int id)
         {
-            var course = _repository.Course.GetCourse(id, trackChanges: false); if (course == null)
-            {
-                _logger.LogInfo($"Organization with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
-            else
-            {
-                var courseDto = _mapper.Map<CourseDto>(course);
-                return Ok(courseDto);
-            }
+            var course = HttpContext.Items["course"] as Course;
+
+            var courseDto = _mapper.Map<CourseDto>(course);
+            return Ok(courseDto);
         }
 
-        [HttpPost(Name = "createOrganization")]
+        [HttpPost(Name = "createCourse")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateCourse([FromBody] CourseForCreationDto course)
         {
-            if (course == null)
-            {
-                _logger.LogError("CourseForCreationDto object sent from client is null.");
-                return BadRequest("CourseForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the CourseForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
             var courseEntity = _mapper.Map<Course>(course);
 
             _repository.Course.CreateCourse(courseEntity);
@@ -74,24 +63,11 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateCourseExistsAttribute))]
         public IActionResult UpdateCourse(int id, [FromBody] CourseForUpdateDto course)
         {
-            if (course == null)
-            {
-                _logger.LogError("CourseForUpdateDto object sent from client is null.");
-                return BadRequest("CourseForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the CourseForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var courseEntity = _repository.Course.GetCourse(id, trackChanges: true);
-            if (courseEntity == null)
-            {
-                _logger.LogInfo($"Course with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var courseEntity = HttpContext.Items["course"] as Course;
 
             _mapper.Map(course, courseEntity);
             _repository.Save();
@@ -102,12 +78,7 @@ namespace SchoolAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteCourse(int id)
         {
-            var course = _repository.Course.GetCourse(id, trackChanges: false);
-            if (course == null)
-            {
-                _logger.LogInfo($"Course with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var course = HttpContext.Items["course"] as Course;
 
             _repository.Course.DeleteCourse(course);
             _repository.Save();

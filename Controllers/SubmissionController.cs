@@ -1,11 +1,16 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Contracts;
+using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-
+using ActionFilters;
+using Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace SchoolAPI.Controllers
 {
@@ -27,56 +32,34 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllSubmissions")]
-
-        public IActionResult GetSubmissions()
+        public IActionResult GetSubmissions([FromQuery] SubmissionParameters submissionParameters)
         {
-            var submissions = _repository.Submission.GetAllSubmissions(trackChanges: false);
+            var usersFromDb = _repository.Submission.GetAllSubmissions(submissionParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(usersFromDb.MetaData));
 
-            var submissionDto = _mapper.Map<IEnumerable<SubmissionDto>>(submissions);
+            var userDto = _mapper.Map<IEnumerable<UserDto>>(usersFromDb);
 
-            return Ok(submissionDto);
+            return Ok(userDto);
 
         }
         [HttpGet("{id}", Name = "getSubmissionById")]
+        [ServiceFilter(typeof(ValidateSubmissionExistsAttribute))]
         public IActionResult GetSubmission(int id)
         {
-            try
 
-            {
-                var submission = _repository.Submission.GetSubmission(id, trackChanges: false);
-                if (submission == null)
-                {
-                    _logger.LogError($"Submission with ID: {id} doesn't exist in the database");
-                    return NotFound();
-                }
-                else
-                {
-                    var submissionDto = _mapper.Map<SubmissionDto>(submission);
-                    return Ok(submissionDto);
-                }
+            var submission = HttpContext.Items["submission"] as Submission;
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetSubmission)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var submissionDto = _mapper.Map<SubmissionDto>(submission);
+            return Ok(submissionDto);
+
 
         }
 
         [HttpPost(Name = "createSubmission")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateSubmission([FromBody] SubmissionForCreationDto submission)
         {
-            if (submission == null)
-            {
-                _logger.LogError("SubmissionForCreationDto object sent from client is null.");
-                return BadRequest("SubmissionForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the UserForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
 
             var submissionEntity = _mapper.Map<Submission>(submission);
 
@@ -89,24 +72,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateSubmissionExistsAttribute))]
         public IActionResult UpdateSubmission(int id, [FromBody] SubmissionForUpdateDto submission)
         {
-            if (submission == null)
-            {
-                _logger.LogError("SubmissionForUpdateDto object sent from client is null.");
-                return BadRequest("SubmissionForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the SubmissionForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var submissionEntity = _repository.Submission.GetSubmission(id, trackChanges: true);
-            if (submissionEntity == null)
-            {
-                _logger.LogInfo($"Submission with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+
+            var submissionEntity = HttpContext.Items["submission"] as Submission;
 
             _mapper.Map(submission, submissionEntity);
             _repository.Save();
@@ -115,16 +86,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateSubmissionExistsAttribute))]
         public IActionResult DeleteSubmission(int id)
         {
-            var submission = _repository.Submission.GetSubmission(id, trackChanges: false);
-            if (submission == null)
-            {
-                _logger.LogInfo($"Submission with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
 
-            _repository.Submission.DeleteSubmission(submission);
+            _repository.User.DeleteUser(user);
             _repository.Save();
 
             return NoContent();

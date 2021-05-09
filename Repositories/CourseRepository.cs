@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Repository.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,10 +15,17 @@ namespace Repositories
         {
         }
 
-        public IEnumerable<Course> GetAllCourses(bool trackChanges) =>
-           FindAll(trackChanges)
-           .OrderBy(c => c.CourseName)
-           .ToList();
+        public PagedList<Course> GetAllCourses(CourseParameters courseParameters, bool trackChanges)
+        {
+            var courses = FindAll(trackChanges)
+                .Search(courseParameters.SearchTerm)
+                .Sort(courseParameters.OrderBy)
+                .ToList();
+
+            return PagedList<Course>
+           .ToPagedList(courses, courseParameters.PageNumber, courseParameters.PageSize);
+
+        }
 
         public Course GetCourse(int Id, bool trackChanges) => FindByCondition(c => c.CourseId.Equals(Id), trackChanges)
             .SingleOrDefault();
@@ -32,5 +41,6 @@ namespace Repositories
             Delete(course);
         }
 
+        
     }
 }

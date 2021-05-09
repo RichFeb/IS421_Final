@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities;
+using Repository;
 
 namespace Repositories
 {

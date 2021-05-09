@@ -1,3 +1,4 @@
+using ActionFilters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,10 @@ namespace SchoolAPI
             });
             services.ConfigureSwagger();
             services.AddControllers();
+
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ValidateOrganizationExistsAttribute>();
+            services.AddScoped<ValidateSubmissionExistsAttribute>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

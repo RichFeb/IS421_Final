@@ -15,7 +15,7 @@ namespace Entities.Configuration
                 new Assignment
                 {
                     AssignmentId = 1,
-                    Name = "",
+                    AssignmentName = "",
                     Description = "",
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now

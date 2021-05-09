@@ -1,15 +1,14 @@
 ﻿using Entities.Models;
-using System.Collections.Generic;
-
+using Entities.RequestFeatures;
+using System.Linq;
 
 
 namespace Contracts
 {
     public interface IOrganizationRepository
     {
-        IEnumerable<Organization> GetAllOrganizations(bool trackChanges);
-        Organization GetOrganization(int Id, bool trackChanges);
-        IEnumerable<Organization> GetByIds(IEnumerable<int> ids, bool trackChanges);
+        PagedList<Organization> GetAllOrganizations(OrganizationParameters organizationParameters, bool trackChanges);
+        Organization GetOrganization(int OrgId, bool trackChanges);
         void CreateOrganization(Organization organization);
 
         void DeleteOrganization(Organization organization);

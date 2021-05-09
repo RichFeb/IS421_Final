@@ -12,6 +12,8 @@ namespace Entities.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SectionId { get; set; }
 
+        public string SectionName { get; set; }
+
         [Column("Capacity")]
         public int Capacity { get; set; }
 

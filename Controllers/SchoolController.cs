@@ -1,15 +1,20 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Contracts;
+using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-
+using ActionFilters;
+using Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace SchoolAPI.Controllers
 {
-    [Route("api/schools")]
+    [Route("api/submissions")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "v1")]
 
@@ -27,60 +32,38 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllSchools")]
-
-        public IActionResult GetSchools()
+        public IActionResult GetSschools([FromQuery] SchoolParameters schoolParameters)
         {
-            var schools = _repository.School.GetAllSchools(trackChanges: false);
+            var schoolsFromDb = _repository.School.GetAllSchools(schoolParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(schoolsFromDb.MetaData));
 
-            var schoolDto = _mapper.Map<IEnumerable<SchoolDto>>(schools);
+            var schoolDto = _mapper.Map<IEnumerable<SchoolDto>>(schoolsFromDb);
 
             return Ok(schoolDto);
 
         }
-        [HttpGet("{id}", Name = "getSchoolBy")]
+        [HttpGet("{id}", Name = "getSchoolById")]
+        [ServiceFilter(typeof(ValidateSchoolExistsAttribute))]
         public IActionResult GetSchool(int id)
         {
-            try
 
-            {
-                var school = _repository.School.GetSchool(id, trackChanges: false);
-                if (school == null)
-                {
-                    _logger.LogError($"School with ID: {id} doesn't exist in the database");
-                    return NotFound();
-                }
-                else
-                {
-                    var schoolDto = _mapper.Map<SchoolDto>(school);
-                    return Ok(schoolDto);
-                }
+            var school = HttpContext.Items["schools"] as School;
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetSchool)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var schoolDto = _mapper.Map<SchoolDto>(school);
+            return Ok(schoolDto);
+
 
         }
 
         [HttpPost(Name = "createSchool")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateSchool([FromBody] SchoolForCreationDto school)
         {
-            if (school == null)
-            {
-                _logger.LogError("SchoolForCreationDto object sent from client is null.");
-                return BadRequest("SchoolForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the SchoolForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
 
-            var schoolEntity = _mapper.Map<User>(school);
+            var schoolEntity = _mapper.Map<School>(school);
 
-            _repository.User.CreateUser(schoolEntity);
+            _repository.School.CreateSchool(schoolEntity);
             _repository.Save();
 
             var schoolToReturn = _mapper.Map<SchoolDto>(schoolEntity);
@@ -89,24 +72,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateSchoolExistsAttribute))]
         public IActionResult UpdateSchool(int id, [FromBody] SchoolForUpdateDto school)
         {
-            if (school == null)
-            {
-                _logger.LogError("SchoolForUpdateDto object sent from client is null.");
-                return BadRequest("SchoolForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the SchoolForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var schoolEntity = _repository.School.GetSchool(id, trackChanges: true);
-            if (schoolEntity == null)
-            {
-                _logger.LogInfo($"School with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+
+            var schoolEntity = HttpContext.Items["school"] as School;
 
             _mapper.Map(school, schoolEntity);
             _repository.Save();
@@ -115,16 +86,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateSchoolExistsAttribute))]
         public IActionResult DeleteSchool(int id)
         {
-            var school = _repository.School.GetSchool(id, trackChanges: false);
-            if (school == null)
-            {
-                _logger.LogInfo($"School with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var school = HttpContext.Items["school"] as School;
 
-            _repository.School.DeleteSchool(school);
+            _repository.School.DeleteSchool(school) ;
             _repository.Save();
 
             return NoContent();

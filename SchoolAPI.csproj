@@ -5,18 +5,22 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="ActionFilters\**" />
 	  <Compile Remove="Contracts\**" />
 	  <Compile Remove="Entities\**" />
 	  <Compile Remove="LoggerService\**" />
 	  <Compile Remove="Repositories\**" />
+	  <Content Remove="ActionFilters\**" />
 	  <Content Remove="Contracts\**" />
 	  <Content Remove="Entities\**" />
 	  <Content Remove="LoggerService\**" />
 	  <Content Remove="Repositories\**" />
+	  <EmbeddedResource Remove="ActionFilters\**" />
 	  <EmbeddedResource Remove="Contracts\**" />
 	  <EmbeddedResource Remove="Entities\**" />
 	  <EmbeddedResource Remove="LoggerService\**" />
 	  <EmbeddedResource Remove="Repositories\**" />
+	  <None Remove="ActionFilters\**" />
 	  <None Remove="Contracts\**" />
 	  <None Remove="Entities\**" />
 	  <None Remove="LoggerService\**" />
@@ -32,12 +36,14 @@
 		</PackageReference>
 		<PackageReference Include="NLog" Version="4.7.9" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.2" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.9" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Contracts\Contracts.csproj" />
 		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Entities\Entities.csproj" />
 		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\LoggerService\LoggerService.csproj" />
 		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Repositories/Repositories.csproj" />
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\ActionFilters/ActionFilters.csproj" />
 	</ItemGroup>
 
 </Project>

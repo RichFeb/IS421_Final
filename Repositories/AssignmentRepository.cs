@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Repository.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,10 +15,18 @@ namespace Repositories
         {
         }
 
-        public IEnumerable<Assignment> GetAllAssignments(bool trackChanges) =>
-           FindAll(trackChanges)
-           .OrderBy(c => c.AssignmentName)
-           .ToList();
+        public PagedList<Assignment> GetAllAssignments(AssignmentParameters assignmentParameters, bool trackChanges)
+        {
+            var assignments = FindAll(trackChanges)
+                .Search(assignmentParameters.SearchTerm)
+                .Sort(assignmentParameters.OrderBy)
+                .ToList();
+
+            return PagedList<Assignment>
+            .ToPagedList(assignments, assignmentParameters.PageNumber, assignmentParameters.PageSize);
+
+
+        }
 
         public Assignment GetAssignment(int Id, bool trackChanges) => FindByCondition(c => c.AssignmentId.Equals(Id), trackChanges)
             .SingleOrDefault();

@@ -14,7 +14,7 @@ namespace Entities.Configuration
                 new Submission
                 {
                     SubmissionId = 1,
-                    Name = "",
+                    SubmissionName = "",
                     Comments = "",
                     Grade = 0,
                     DateCreated = DateTime.Now,

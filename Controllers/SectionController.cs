@@ -1,15 +1,20 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Contracts;
+using AutoMapper;
 using Entities.DataTransferObjects;
 using Entities.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-
+using ActionFilters;
+using Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace SchoolAPI.Controllers
 {
-    [Route("api/sections")]
+    [Route("api/submissions")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "v1")]
 
@@ -27,56 +32,34 @@ namespace SchoolAPI.Controllers
 
         }
         [HttpGet(Name = "getAllSections")]
-
-        public IActionResult GetSections()
+        public IActionResult GetSections([FromQuery] SectionParameters sectionParameters)
         {
-            var sections = _repository.Section.GetAllSections(trackChanges: false);
+            var sectionsFromDb = _repository.Section.GetAllSections(sectionParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(sectionsFromDb.MetaData));
 
-            var sectionDto = _mapper.Map<IEnumerable<SubmissionDto>>(sections);
+            var sectionDto = _mapper.Map<IEnumerable<SectionDto>>(sectionsFromDb);
 
             return Ok(sectionDto);
 
         }
         [HttpGet("{id}", Name = "getSectionById")]
+        [ServiceFilter(typeof(ValidateSectionExistsAttribute))]
         public IActionResult GetSection(int id)
         {
-            try
 
-            {
-                var section = _repository.Section.GetSection(id, trackChanges: false);
-                if (section == null)
-                {
-                    _logger.LogError($"Section with ID: {id} doesn't exist in the database");
-                    return NotFound();
-                }
-                else
-                {
-                    var sectionDto = _mapper.Map<SectionDto>(section);
-                    return Ok(sectionDto);
-                }
+            var section = HttpContext.Items["section"] as Section;
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetSection)} action {ex}");
-                return StatusCode(500, "Internal server error");
-            }
+            var sectionDto = _mapper.Map<SectionDto>(section);
+            return Ok(sectionDto);
+
 
         }
 
-        [HttpPost(Name = "createSection")]
+        [HttpPost(Name = "createSchool")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateSection([FromBody] SectionForCreationDto section)
         {
-            if (section == null)
-            {
-                _logger.LogError("SectionForCreationDto object sent from client is null.");
-                return BadRequest("SectionForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the SectionForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
 
             var sectionEntity = _mapper.Map<Section>(section);
 
@@ -89,24 +72,12 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateSectionExistsAttribute))]
         public IActionResult UpdateSection(int id, [FromBody] SectionForUpdateDto section)
         {
-            if (section == null)
-            {
-                _logger.LogError("SectionForUpdateDto object sent from client is null.");
-                return BadRequest("SectionForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the SectionForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var sectionEntity = _repository.Section.GetSection(id, trackChanges: true);
-            if (sectionEntity == null)
-            {
-                _logger.LogInfo($"Section with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+
+            var sectionEntity = HttpContext.Items["sections"] as Section;
 
             _mapper.Map(section, sectionEntity);
             _repository.Save();
@@ -115,14 +86,10 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateSectionExistsAttribute))]
         public IActionResult DeleteSection(int id)
         {
-            var section = _repository.Section.GetSection(id, trackChanges: false);
-            if (section == null)
-            {
-                _logger.LogInfo($"Section with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var section = HttpContext.Items["school"] as Section;
 
             _repository.Section.DeleteSection(section);
             _repository.Save();

@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using ActionFilters;
+using AutoMapper;
 using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
+using Entities.RequestFeatures;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace SchoolAPI.Controllers
@@ -24,45 +27,31 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpGet(Name = "getAllAssignments")]
-        public IActionResult GetAssignments()
+        public IActionResult GetAssignments([FromQuery] AssignmentParameters assignmentParameters)
         {
-            var assignments = _repository.Assignment.GetAllAssignments(trackChanges: false);
+            var assignmentsFromDb = _repository.Assignment.GetAllAssignments(assignmentParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(assignmentsFromDb.MetaData));
 
-            var assignmentDto = _mapper.Map<IEnumerable<AssignmentDto>>(assignments);
-            //uncomment the code below to test the global exception handling
-            //throw new Exception("Exception");
+            var assignmentDto = _mapper.Map<IEnumerable<AssignmentDto>>(assignmentsFromDb);
+
             return Ok(assignmentDto);
         }
 
         [HttpGet("{id}", Name = "getAssignmentById")]
+        [ServiceFilter(typeof(ValidateAssignmentExistsAttribute))]
         public IActionResult GetAssignment(int id)
         {
-            var assignment = _repository.Assignment.GetAssignment(id, trackChanges: false); if (assignment == null)
-            {
-                _logger.LogInfo($"Assignment with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
-            else
-            {
-                var assignmentDto = _mapper.Map<AssignmentDto>(assignment);
-                return Ok(assignmentDto);
-            }
+            var assignment = HttpContext.Items["assignments"] as Assignment;
+
+            var assignmentDto = _mapper.Map<AssignmentDto>(assignment);
+            return Ok(assignmentDto);
         }
 
         [HttpPost(Name = "createAssignment")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateAssignment([FromBody] AssignmentForCreationDto assignment)
         {
-            if (assignment == null)
-            {
-                _logger.LogError("AssignmentForCreationDto object sent from client is null.");
-                return BadRequest("AssignmentForCreationDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the AssignmentForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
             var assignmentEntity = _mapper.Map<Assignment>(assignment);
 
             _repository.Assignment.CreateAssignment(assignmentEntity);
@@ -74,24 +63,11 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         public IActionResult UpdateAssignment(int id, [FromBody] AssignmentForUpdateDto assignment)
         {
-            if (assignment == null)
-            {
-                _logger.LogError("AssignmentForUpdateDto object sent from client is null.");
-                return BadRequest("AssignmentForUpdateDto object is null");
-            }
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the AssignmentForUpdateDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var assignmentEntity = _repository.Assignment.GetAssignment(id, trackChanges: true);
-            if (assignmentEntity == null)
-            {
-                _logger.LogInfo($"Assignment with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var assignmentEntity = HttpContext.Items["assignment"] as Assignment;
 
             _mapper.Map(assignment, assignmentEntity);
             _repository.Save();
@@ -100,19 +76,15 @@ namespace SchoolAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateAssignmentExistsAttribute))]
         public IActionResult DeleteAssignment(int id)
         {
-            var course = _repository.Course.GetCourse(id, trackChanges: false);
-            if (course == null)
-            {
-                _logger.LogInfo($"Course with id: {id} doesn't exist in the database.");
-                return NotFound();
-            }
+            var assignment = HttpContext.Items["assignment"] as Assignment;
 
-            _repository.Course.DeleteCourse(course);
+            _repository.Assignment.DeleteAssignment(assignment);
             _repository.Save();
 
             return NoContent();
         }
-    }
+    } 
 }
