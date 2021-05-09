@@ -23,6 +23,11 @@ namespace SchoolAPI
             CreateMap<SchoolForCreationDto, School>();
             CreateMap<SchoolForUpdateDto, School>();
 
+            CreateMap<Course, CourseDto>();
+            CreateMap<CourseForCreationDto, Course>();
+            CreateMap<CourseForUpdateDto, Course>();
+
+
             CreateMap<Assignment, AssignmentDto>();
             CreateMap<AssignmentForCreationDto, Assignment>();
             CreateMap<AssignmentForUpdateDto, Assignment>();
