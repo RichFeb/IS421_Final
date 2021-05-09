@@ -9,8 +9,6 @@ namespace Entities.DataTransferObjects
         public int CourseId { get; set; }
 
         public int CourseName { get; set; }
- 
-        public string Type { get; set; }
 
         public string Description { get; set; }
 

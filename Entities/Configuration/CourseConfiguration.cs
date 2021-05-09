@@ -15,8 +15,8 @@ namespace Entities.Configuration
                 new Course
                 {
                     CourseId = 1,
+                    CourseName = "",
                     Description = "",
-                    CourseType = "Core",
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now
 

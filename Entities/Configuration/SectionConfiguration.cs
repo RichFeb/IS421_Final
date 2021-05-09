@@ -15,6 +15,7 @@ namespace Entities.Configuration
                 new Section
                 {
                     SectionId = 1,
+                    SectionName = "",
                     Capacity = 30,
                     DateCreated = DateTime.Now,
                     DateUpdated = DateTime.Now

@@ -10,44 +10,44 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SchoolAPI.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20210502161854_InitialData")]
+    [Migration("20210509235246_InitialData")]
     partial class InitialData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Entities.Models.Assignment", b =>
                 {
                     b.Property<int>("AssignmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("AssignmentID")
                         .HasColumnType("int")
+                        .HasColumnName("AssignmentID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AssignmentName")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasColumnName("Name");
+
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(60)")
-                        .HasMaxLength(60);
+                        .HasColumnName("Description");
 
                     b.Property<int?>("SectionId")
                         .HasColumnType("int");
@@ -57,83 +57,101 @@ namespace SchoolAPI.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("Assignments");
+
+                    b.HasData(
+                        new
+                        {
+                            AssignmentId = 1,
+                            AssignmentName = "",
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(1570),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(1936),
+                            Description = ""
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Course", b =>
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CourseID")
                         .HasColumnType("int")
+                        .HasColumnName("CourseID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CourseName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("Name");
+
                     b.Property<DateTime>("DateCreated")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
+                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
+                        .HasColumnName("Description");
 
                     b.Property<int?>("SchoolId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnName("Type")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
 
                     b.HasKey("CourseId");
 
                     b.HasIndex("SchoolId");
 
                     b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            CourseId = 1,
+                            CourseName = "",
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(9787),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(150),
+                            Description = ""
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Organization", b =>
                 {
                     b.Property<int>("OrgId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OrganizationID")
                         .HasColumnType("int")
+                        .HasColumnName("OrganizationID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("City");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Country");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<string>("OrgName")
                         .IsRequired()
-                        .HasColumnName("Name")
+                        .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)")
-                        .HasMaxLength(60);
+                        .HasColumnName("Name");
 
                     b.Property<string>("OrgType")
                         .IsRequired()
-                        .HasColumnName("OrgType")
+                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnName("OrgType");
 
                     b.HasKey("OrgId");
 
@@ -143,8 +161,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             OrgId = 1,
-                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(1959),
-                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(2329),
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(3928),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(4313),
                             OrgName = "NJIT",
                             OrgType = "Public"
                         });
@@ -154,56 +172,68 @@ namespace SchoolAPI.Migrations
                 {
                     b.Property<int>("SchoolId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SchoolID")
                         .HasColumnType("int")
+                        .HasColumnName("SchoolID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<int?>("OrganizationOrgId")
                         .HasColumnType("int");
 
                     b.Property<string>("SchoolName")
                         .IsRequired()
-                        .HasColumnName("Name")
+                        .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)")
-                        .HasMaxLength(60);
+                        .HasColumnName("Name");
 
                     b.HasKey("SchoolId");
 
                     b.HasIndex("OrganizationOrgId");
 
                     b.ToTable("Schools");
+
+                    b.HasData(
+                        new
+                        {
+                            SchoolId = 1,
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(3299),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(3660),
+                            SchoolName = "NJIT"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.Section", b =>
                 {
                     b.Property<int>("SectionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SectionID")
                         .HasColumnType("int")
+                        .HasColumnName("SectionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Capacity")
-                        .HasColumnName("Capacity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Capacity");
 
                     b.Property<int?>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
+
+                    b.Property<string>("SectionName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SectionId");
 
@@ -216,8 +246,9 @@ namespace SchoolAPI.Migrations
                         {
                             SectionId = 1,
                             Capacity = 30,
-                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5258),
-                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5613)
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(7800),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(8158),
+                            SectionName = ""
                         });
                 });
 
@@ -225,92 +256,103 @@ namespace SchoolAPI.Migrations
                 {
                     b.Property<int>("SubmissionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SubmissionID")
                         .HasColumnType("int")
+                        .HasColumnName("SubmissionID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AssignmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comments")
-                        .HasColumnName("Comments")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comments");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<int>("Grade")
-                        .HasColumnName("Grade")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Grade");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("SubmissionName")
                         .IsRequired()
-                        .HasColumnName("Name")
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnName("Name");
 
                     b.HasKey("SubmissionId");
 
                     b.HasIndex("AssignmentId");
 
                     b.ToTable("Submissions");
+
+                    b.HasData(
+                        new
+                        {
+                            SubmissionId = 1,
+                            Comments = "",
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(5786),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(6144),
+                            Grade = 0,
+                            SubmissionName = ""
+                        });
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UserID")
                         .HasColumnType("int")
+                        .HasColumnName("UserID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnName("DateCreated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateCreated");
 
                     b.Property<DateTime>("DateUpdated")
-                        .HasColumnName("DateUpdated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateUpdated");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnName("Email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnName("FirstName")
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnName("FirstName");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnName("LastName")
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnName("LastName");
 
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnName("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhoneNumber");
 
                     b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnName("UserName")
+                        .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnName("UserName");
 
                     b.HasKey("UserId");
 
@@ -324,8 +366,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2021, 5, 2, 12, 18, 54, 681, DateTimeKind.Local).AddTicks(9537),
-                            DateUpdated = new DateTime(2021, 5, 2, 12, 18, 54, 682, DateTimeKind.Local).AddTicks(66),
+                            DateCreated = new DateTime(2021, 5, 9, 19, 52, 46, 194, DateTimeKind.Local).AddTicks(494),
+                            DateUpdated = new DateTime(2021, 5, 9, 19, 52, 46, 194, DateTimeKind.Local).AddTicks(1052),
                             Email = "rf57@njit.edu",
                             FirstName = "Richard",
                             LastName = "Febres",
@@ -381,6 +423,35 @@ namespace SchoolAPI.Migrations
                     b.HasOne("Entities.Models.Section", null)
                         .WithMany("RegisteredUsers")
                         .HasForeignKey("SectionId");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Entities.Models.Assignment", b =>
+                {
+                    b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("Entities.Models.Course", b =>
+                {
+                    b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("Entities.Models.Organization", b =>
+                {
+                    b.Navigation("Schools");
+                });
+
+            modelBuilder.Entity("Entities.Models.School", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Entities.Models.Section", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("RegisteredUsers");
                 });
 #pragma warning restore 612, 618
         }

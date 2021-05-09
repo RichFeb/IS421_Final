@@ -11,14 +11,14 @@ namespace SchoolAPI.Migrations
                 name: "Organizations",
                 columns: table => new
                 {
-                    OrganizationID = table.Column<int>(nullable: false)
+                    OrganizationID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    OrgType = table.Column<string>(maxLength: 20, nullable: false),
-                    City = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    OrgType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,12 +29,12 @@ namespace SchoolAPI.Migrations
                 name: "Schools",
                 columns: table => new
                 {
-                    SchoolID = table.Column<int>(nullable: false)
+                    SchoolID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    OrganizationOrgId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrganizationOrgId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,13 +51,13 @@ namespace SchoolAPI.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    CourseID = table.Column<int>(nullable: false)
+                    CourseID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(maxLength: 30, nullable: false),
-                    Description = table.Column<string>(maxLength: 150, nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    SchoolId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SchoolId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,12 +74,13 @@ namespace SchoolAPI.Migrations
                 name: "Sections",
                 columns: table => new
                 {
-                    SectionID = table.Column<int>(nullable: false)
+                    SectionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Capacity = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    CourseId = table.Column<int>(nullable: true)
+                    SectionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,13 +97,13 @@ namespace SchoolAPI.Migrations
                 name: "Assignments",
                 columns: table => new
                 {
-                    AssignmentID = table.Column<int>(nullable: false)
+                    AssignmentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 60, nullable: false),
-                    Description = table.Column<string>(maxLength: 150, nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    SectionId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,17 +120,17 @@ namespace SchoolAPI.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(nullable: false)
+                    UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(maxLength: 30, nullable: false),
-                    Email = table.Column<string>(maxLength: 30, nullable: false),
-                    FirstName = table.Column<string>(maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(maxLength: 30, nullable: false),
-                    PhoneNumber = table.Column<string>(nullable: false),
-                    OrganizationId = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    SectionId = table.Column<int>(nullable: true)
+                    UserName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -152,14 +153,14 @@ namespace SchoolAPI.Migrations
                 name: "Submissions",
                 columns: table => new
                 {
-                    SubmissionID = table.Column<int>(nullable: false)
+                    SubmissionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 30, nullable: false),
-                    Comments = table.Column<string>(nullable: true),
-                    Grade = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateUpdated = table.Column<DateTime>(nullable: false),
-                    AssignmentId = table.Column<int>(nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AssignmentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -173,19 +174,39 @@ namespace SchoolAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Assignments",
+                columns: new[] { "AssignmentID", "Name", "DateCreated", "DateUpdated", "Description", "SectionId" },
+                values: new object[] { 1, "", new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(1570), new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(1936), "", null });
+
+            migrationBuilder.InsertData(
+                table: "Courses",
+                columns: new[] { "CourseID", "Name", "DateCreated", "DateUpdated", "Description", "SchoolId" },
+                values: new object[] { 1, "", new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(9787), new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(150), "", null });
+
+            migrationBuilder.InsertData(
                 table: "Organizations",
                 columns: new[] { "OrganizationID", "City", "Country", "DateCreated", "DateUpdated", "Name", "OrgType" },
-                values: new object[] { 1, null, null, new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(1959), new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(2329), "NJIT", "Public" });
+                values: new object[] { 1, null, null, new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(3928), new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(4313), "NJIT", "Public" });
+
+            migrationBuilder.InsertData(
+                table: "Schools",
+                columns: new[] { "SchoolID", "DateCreated", "DateUpdated", "OrganizationOrgId", "Name" },
+                values: new object[] { 1, new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(3299), new DateTime(2021, 5, 9, 19, 52, 46, 197, DateTimeKind.Local).AddTicks(3660), null, "NJIT" });
 
             migrationBuilder.InsertData(
                 table: "Sections",
-                columns: new[] { "SectionID", "Capacity", "CourseId", "DateCreated", "DateUpdated" },
-                values: new object[] { 1, 30, null, new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5258), new DateTime(2021, 5, 2, 12, 18, 54, 683, DateTimeKind.Local).AddTicks(5613) });
+                columns: new[] { "SectionID", "Capacity", "CourseId", "DateCreated", "DateUpdated", "SectionName" },
+                values: new object[] { 1, 30, null, new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(7800), new DateTime(2021, 5, 9, 19, 52, 46, 195, DateTimeKind.Local).AddTicks(8158), "" });
+
+            migrationBuilder.InsertData(
+                table: "Submissions",
+                columns: new[] { "SubmissionID", "AssignmentId", "Comments", "DateCreated", "DateUpdated", "Grade", "Name" },
+                values: new object[] { 1, null, "", new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(5786), new DateTime(2021, 5, 9, 19, 52, 46, 196, DateTimeKind.Local).AddTicks(6144), 0, "" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "DateCreated", "DateUpdated", "Email", "FirstName", "LastName", "OrganizationId", "PhoneNumber", "SectionId", "UserName" },
-                values: new object[] { 1, new DateTime(2021, 5, 2, 12, 18, 54, 681, DateTimeKind.Local).AddTicks(9537), new DateTime(2021, 5, 2, 12, 18, 54, 682, DateTimeKind.Local).AddTicks(66), "rf57@njit.edu", "Richard", "Febres", 1, "201-923-3911", null, "rfebres" });
+                values: new object[] { 1, new DateTime(2021, 5, 9, 19, 52, 46, 194, DateTimeKind.Local).AddTicks(494), new DateTime(2021, 5, 9, 19, 52, 46, 194, DateTimeKind.Local).AddTicks(1052), "rf57@njit.edu", "Richard", "Febres", 1, "201-923-3911", null, "rfebres" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SectionId",

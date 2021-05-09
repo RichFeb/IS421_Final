@@ -13,12 +13,6 @@ namespace Entities.DataTransferObjects
 
         public int CourseName { get; set; }
 
-        [Required(ErrorMessage = "Course type is a required field.")]
-        [MaxLength(60, ErrorMessage = "Maximum length for the Type is 60 characters.")]
-        [MinLength(5, ErrorMessage = "Minimum length for the Type is 5 characters.")]
-
-        public string Type { get; set; }
-
         [Required(ErrorMessage = "Course description is a required field.")]
         [MaxLength(60, ErrorMessage = "Maximum length for the description is 60 characters.")]
         [MinLength(5, ErrorMessage = "Minimum length for the description is 5 characters.")]
