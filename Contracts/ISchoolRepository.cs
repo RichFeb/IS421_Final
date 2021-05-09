@@ -9,8 +9,10 @@ namespace Contracts
     public interface ISchoolRepository
     {
         IEnumerable<School> GetAllSchools(bool trackChanges);
-        School GetSchools(int Id, bool trackChanges);
+        School GetSchool(int Id, bool trackChanges);
         IEnumerable<School> GetByIds(IEnumerable<int> ids, bool trackChanges);
+        void CreateSchool(School school);
+
         void DeleteSchool(School school);
     }
 }

@@ -5,10 +5,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NLog" Version="4.7.2" />
+		<PackageReference Include="NLog" Version="4.7.9" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Contracts\Contracts.csproj" />
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Contracts\Contracts.csproj" />
 	</ItemGroup>
 </Project>

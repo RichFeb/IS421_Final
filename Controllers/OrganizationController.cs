@@ -3,20 +3,20 @@ using Contracts;
 using Entities.DataTransferObjects;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 
 namespace SchoolAPI.Controllers
 {
-    [Route("api/v1/organizations")]
+    [Route("api/organizations")]
     [ApiController]
-    public class OrganizationsController : ControllerBase
+    [ApiExplorerSettings(GroupName = "v1")]
+    public class OrganizationController : ControllerBase
     {
         private readonly IRepositoryManager _repository;
         private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
 
-        public OrganizationsController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
+        public OrganizationController(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;

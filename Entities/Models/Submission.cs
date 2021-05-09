@@ -17,7 +17,7 @@ namespace Entities.Models
         [MaxLength(30, ErrorMessage = "Maximum length for Submission Name is 30 characters.")]
 
         [Required(ErrorMessage = "Submission Name is a required field.")]
-        public string Name { get; set; }
+        public string SubmissionName { get; set; }
 
         [Column("Comments")]
         public string Comments { get; set; }

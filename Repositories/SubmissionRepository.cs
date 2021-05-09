@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Repositories
 {
@@ -10,5 +12,26 @@ namespace Repositories
             : base(repositoryContext)
         {
         }
+
+        public IEnumerable<Submission> GetAllSubmissions(bool trackChanges) =>
+          FindAll(trackChanges)
+          .OrderBy(c => c.SubmissionName)
+          .ToList();
+
+        public Submission GetSubmission(int Id, bool trackChanges) => FindByCondition(c => c.SubmissionId.Equals(Id), trackChanges)
+            .SingleOrDefault();
+
+        public IEnumerable<Submission> GetByIds(IEnumerable<int> ids, bool trackChanges) =>
+          FindByCondition(x => ids.Contains(x.SubmissionId), trackChanges)
+          .ToList();
+
+        public void CreateSubmission(Submission submission) => Create(submission);
+
+
+        public void DeleteSubmission(Submission submission)
+        {
+            Delete(submission);
+        }
+
     }
 }

@@ -18,12 +18,15 @@ namespace Repositories
             .OrderBy(c => c.SchoolName)
             .ToList();
 
-        public School GetSchools(int Id, bool trackChanges) => FindByCondition(c => c.SchoolId.Equals(Id), trackChanges)
+        public School GetSchool(int Id, bool trackChanges) => FindByCondition(c => c.SchoolId.Equals(Id), trackChanges)
             .SingleOrDefault();
 
         public IEnumerable<School> GetByIds(IEnumerable<int> ids, bool trackChanges) =>
           FindByCondition(x => ids.Contains(x.SchoolId), trackChanges)
           .ToList();
+
+        public void CreateSchool(School school) => Create(school);
+
 
         public void DeleteSchool(School school)
         {
