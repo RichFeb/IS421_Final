@@ -3,21 +3,24 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
+
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Contracts\Contracts.csproj" />
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Entities\Entities.csproj" />
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\LoggerService\LoggerService.csproj" />
+		<ProjectReference Include="C:\Users\Rich\source\repos\SchoolAPI\Repositories/Repositories.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Entities\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Contracts\Contracts.csproj" />
-		<ProjectReference Include="..\Entities\Entities.csproj" />
-		<ProjectReference Include="..\LoggerService\LoggerService.csproj" />
-		<ProjectReference Include="..\Repositories\Repositories.csproj" />
-	</ItemGroup>
 </Project>
