@@ -1,10 +1,11 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models
 {
-    public class User
+    public class User : IdentityUser
     {
         [Column("UserID")]
         [Key]
@@ -18,7 +19,7 @@ namespace Entities.Models
         [MinLength(6, ErrorMessage = "Minimum length for the Name is 6 characters. ")]
         [MaxLength(30, ErrorMessage = "Maximum length for the Name is 30 characters.")]
 
-        public string UserName { get; set; }
+        public override string UserName { get; set; }
 
         [Column("Email")]
 
@@ -29,7 +30,7 @@ namespace Entities.Models
        
         [EmailAddress]
 
-        public string Email { get; set; }
+        public override string Email { get; set; }
 
         [Column("FirstName")]
 
@@ -53,7 +54,7 @@ namespace Entities.Models
         [Required(ErrorMessage = "Phone Number is a required field.")]
 
         [Phone]
-        public string PhoneNumber { get; set; }
+        public override string PhoneNumber { get; set; }
 
         [ForeignKey(nameof(Organization))]
         public int OrganizationId { get; set; }

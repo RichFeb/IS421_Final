@@ -20,6 +20,7 @@ namespace Entities
             modelBuilder.ApplyConfiguration(new SubmissionConfiguration());
             modelBuilder.ApplyConfiguration(new CourseConfiguration());
             modelBuilder.ApplyConfiguration(new SchoolConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Organization> Organizations { get; set; }
