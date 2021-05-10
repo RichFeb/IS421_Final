@@ -61,8 +61,8 @@ namespace SchoolAPI.Migrations
                         {
                             AssignmentId = 1,
                             AssignmentName = "",
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(4169),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(4521),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 528, DateTimeKind.Local).AddTicks(3065),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 528, DateTimeKind.Local).AddTicks(3437),
                             Description = ""
                         });
                 });
@@ -109,8 +109,8 @@ namespace SchoolAPI.Migrations
                         {
                             CourseId = 1,
                             CourseName = "",
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 933, DateTimeKind.Local).AddTicks(1831),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 933, DateTimeKind.Local).AddTicks(2179),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 529, DateTimeKind.Local).AddTicks(1962),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 529, DateTimeKind.Local).AddTicks(2335),
                             Description = ""
                         });
                 });
@@ -159,8 +159,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             OrgId = 1,
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 931, DateTimeKind.Local).AddTicks(6630),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 931, DateTimeKind.Local).AddTicks(6994),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 526, DateTimeKind.Local).AddTicks(6956),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 526, DateTimeKind.Local).AddTicks(7380),
                             OrgName = "NJIT",
                             OrgType = "Public"
                         });
@@ -201,8 +201,8 @@ namespace SchoolAPI.Migrations
                         new
                         {
                             SchoolId = 1,
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 933, DateTimeKind.Local).AddTicks(5213),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 933, DateTimeKind.Local).AddTicks(5562),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 529, DateTimeKind.Local).AddTicks(5550),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 529, DateTimeKind.Local).AddTicks(6055),
                             SchoolName = "NJIT"
                         });
                 });
@@ -244,8 +244,8 @@ namespace SchoolAPI.Migrations
                         {
                             SectionId = 1,
                             Capacity = 30,
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(469),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(817),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 527, DateTimeKind.Local).AddTicks(9065),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 527, DateTimeKind.Local).AddTicks(9450),
                             SectionName = ""
                         });
                 });
@@ -294,8 +294,8 @@ namespace SchoolAPI.Migrations
                         {
                             SubmissionId = 1,
                             Comments = "",
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(8135),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 932, DateTimeKind.Local).AddTicks(8484),
+                            DateCreated = new DateTime(2021, 5, 10, 17, 10, 18, 528, DateTimeKind.Local).AddTicks(7851),
+                            DateUpdated = new DateTime(2021, 5, 10, 17, 10, 18, 528, DateTimeKind.Local).AddTicks(8263),
                             Grade = 0,
                             SubmissionName = ""
                         });
@@ -303,16 +303,14 @@ namespace SchoolAPI.Migrations
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UserID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
@@ -325,8 +323,8 @@ namespace SchoolAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("Email");
 
                     b.Property<bool>("EmailConfirmed")
@@ -337,9 +335,6 @@ namespace SchoolAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)")
                         .HasColumnName("FirstName");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -354,10 +349,12 @@ namespace SchoolAPI.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
@@ -382,41 +379,33 @@ namespace SchoolAPI.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("UserID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)")
                         .HasColumnName("UserName");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("OrganizationId");
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "af2656e4-14f0-40ae-b0f7-0c45edf87c70",
-                            DateCreated = new DateTime(2021, 5, 9, 20, 27, 5, 930, DateTimeKind.Local).AddTicks(4253),
-                            DateUpdated = new DateTime(2021, 5, 9, 20, 27, 5, 930, DateTimeKind.Local).AddTicks(4766),
-                            Email = "rf57@njit.edu",
-                            EmailConfirmed = false,
-                            FirstName = "Richard",
-                            Id = "0f4e37f3-f447-4738-bb14-2bf2289aef60",
-                            LastName = "Febres",
-                            LockoutEnabled = false,
-                            OrganizationId = 1,
-                            PhoneNumber = "201-923-3911",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "8d817ebf-3caa-49a9-90ef-c57d607b7f39",
-                            TwoFactorEnabled = false,
-                            UserName = "rfebres"
-                        });
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -425,33 +414,145 @@ namespace SchoolAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("IdentityRole");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
-                            Id = "8d0ef81f-6fb7-495e-81e3-7c9c686525a5",
-                            ConcurrencyStamp = "b60bc95e-5cb5-4d9d-8c80-50070847a441",
+                            Id = "5246d727-88af-4055-bfd4-056a9c01a72e",
+                            ConcurrencyStamp = "9768e7b9-4f2c-442a-bf72-e2791a1161f7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f9f6bde3-ba8a-4f83-bc5b-2ecfcbf8947a",
-                            ConcurrencyStamp = "ce696377-c652-4f28-a2f4-de9e5e20dfd9",
+                            Id = "e1f77da4-bee2-47c4-9590-887184a78853",
+                            ConcurrencyStamp = "885f07ff-cd25-44f9-9c91-5fed9fd6fce4",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Entities.Models.Assignment", b =>
@@ -502,6 +603,57 @@ namespace SchoolAPI.Migrations
                         .HasForeignKey("SectionId");
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Entities.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Entities.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Entities.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Models.Assignment", b =>

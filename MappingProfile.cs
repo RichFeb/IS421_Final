@@ -18,6 +18,7 @@ namespace SchoolAPI
             CreateMap<User, UserDto>();
             CreateMap<UserForCreationDto, User>();
             CreateMap<UserForUpdateDto, User>();
+            CreateMap<UserForRegistrationDto, User>();
 
             CreateMap<School, SchoolDto>();
             CreateMap<SchoolForCreationDto, School>();
