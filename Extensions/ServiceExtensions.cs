@@ -1,12 +1,11 @@
 ﻿using Contracts;
+using Entities;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Entities;
-using NLog;
 using Repositories;
 
 namespace SchoolAPI.Extensions
@@ -22,7 +21,8 @@ namespace SchoolAPI.Extensions
                     .AllowAnyHeader());
             });
 
-
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) =>
+            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 
         public static void ConfigureIISIntegration(this IServiceCollection services) =>
             services.Configure<IISOptions>(options =>
